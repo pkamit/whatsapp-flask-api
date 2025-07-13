@@ -1,0 +1,8 @@
+[project]
+name = "whatsapp-flask-app"
+version = "0.1.0"
+dependencies = [
+    "flask",
+    "python-dotenv>=1.1.1",
+    "requests",
+]
