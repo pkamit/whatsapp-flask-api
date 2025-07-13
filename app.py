@@ -39,6 +39,27 @@ def send_message():
 def home():
     return "WhatsApp Flask API is running."
 
+@app.route("/webhook", methods=["GET", "POST"])
+def whatsapp_webhook():
+    if request.method == "GET":
+        # Verification challenge
+        verify_token = os.environ.get("VERIFY_TOKEN", "my_verify_token")
+        mode = request.args.get("hub.mode")
+        token = request.args.get("hub.verify_token")
+        challenge = request.args.get("hub.challenge")
+
+        if mode == "subscribe" and token == verify_token:
+            print("Webhook verified")
+            return challenge, 200
+        else:
+            return "Verification failed", 403
+
+    if request.method == "POST":
+        data = request.get_json()
+        print("Incoming webhook data:", data)
+        return "EVENT_RECEIVED", 200
+
+
 if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 5000))
